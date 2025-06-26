@@ -1,12 +1,37 @@
-# React + Vite
+# 💎 Radiant Legacy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Radiant Legacy** es una joyería moderna desarrollada con **React.js** en el front-end y próximamente integrada con un **API en Spring Boot** para la parte back-end. Su objetivo es ofrecer una experiencia de compra elegante, profesional y responsive, que permita a los usuarios explorar joyas exclusivas, conocer nuestras sedes, ver testimonios y mucho más.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Características
 
-## Expanding the ESLint configuration
+- 🖥️ **Front-End en React.js** con componentes modernos y reutilizables.
+- 🎨 Diseño responsive y elegante utilizando **Bootstrap** y **CSS personalizado**.
+- 🧭 Navegación fluida con **React Router** y scroll suave entre secciones.
+- 🔐 Integración sencilla para el manejo de **autenticación** (registro e inicio de sesión) con un **Context global**.
+- 🧠 **Loading overlay** para una experiencia atractiva al navegar entre páginas.
+- 🏬 Próxima integración con back-end en **Spring Boot** para:
+  - Catálogo dinámico conectado a base de datos.
+  - Gestión de usuarios y órdenes.
+  - Autenticación y sesiones seguras.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tecnologías usadas
+
+- ⚛️ **React.js + Vite** para el front-end.
+- 🎨 **Bootstrap 5** y **CSS personalizado** para los estilos.
+- 🧭 **React Router v6** para el enrutamiento entre páginas.
+- 🧠 **Context API** para el manejo global del estado de autenticación.
+- 📡 (Próximamente) **Spring Boot + REST API** para el back-end.
+- 🗄️ (Próximamente) **Base de datos SQL Server / MySQL** para persistencia.
+
+---
+
+## 🚀 Cómo probarlo localmente
+
+### 1️⃣ Clona este repositorio:
+```bash
+git clone https://github.com/TU_USUARIO/radiant-legacy.git
+cd radiant-legacy
