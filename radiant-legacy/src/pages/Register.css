@@ -1,0 +1,68 @@
+.register-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #202020, #2c2c2c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.register-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.register-card:hover {
+  box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.2);
+}
+
+.register-card h2 {
+  color: #202020;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem;
+}
+
+.register-card input {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 0.65rem;
+  transition: border-color 0.2s ease;
+}
+
+.register-card input:focus {
+  border-color: #e0ac00;
+  box-shadow: 0 0 0 0.1rem rgba(224, 172, 0, 0.2);
+}
+
+.register-card button {
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #e0ac00;
+  color: #202020;
+  padding: 0.75rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-card button:hover {
+  background-color: #cf9b00;
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.register-card .link-login {
+  color: #e0ac00;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.register-card .link-login:hover {
+  color: #cf9b00;
+  text-decoration: underline;
+}
