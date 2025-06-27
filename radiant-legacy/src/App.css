@@ -258,12 +258,29 @@
 
 .sedes-section .card {
   background-color: #ffffff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
 .sedes-section .card:hover {
   transform: scale(1.03);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.sedes-section .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.sedes-section .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .hover\:text-primary:hover {
@@ -371,14 +388,14 @@ footer .hover\:text-warning:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7); 
+  background: rgba(0, 0, 0, 0.7);
   z-index: 9999;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px); 
+  backdrop-filter: blur(4px);
   animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -393,13 +410,23 @@ footer .hover\:text-warning:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 767px) {

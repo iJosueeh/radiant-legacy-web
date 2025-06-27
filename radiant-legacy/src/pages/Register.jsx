@@ -1,29 +1,48 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import './Register.css';
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { registerUser } from '../services/authService';
 
 const Register = () => {
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const [nombre, setNombre] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            alert("¡Las contraseñas no coinciden!");
+            setError('Las contraseñas no coinciden.');
             return;
         }
 
-        console.log({ nombre, email, password, confirmPassword });
+        try {
+            const response = await registerUser(nombre, email, password);
+            if (response.token) {
+                login(response.token);
+                navigate("/");
+            } else {
+                setError('Registro exitoso, pero no se recibió token.');
+            }
+        } catch (err) {
+            console.log(err);
+            setError("Error al registrar. Por favor, intenta de nuevo.");
+        }
     }
 
     return (
         <div className="container mt-5 pt-5 d-flex justify-content-center">
             <div className="bg-white p-5 rounded-4 shadow-lg" style={{ maxWidth: "420px", width: "100%" }}>
                 <h2 className="text-center mb-4 fw-bold text-dark">Crea tu cuenta</h2>
+                {error && <div className="alert alert-danger p-2">{error}</div>}
                 <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
                     <div>
                         <label className="form-label fw-medium">Nombre completo</label>

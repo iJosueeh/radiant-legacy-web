@@ -1,20 +1,23 @@
 import CatalogCard from './CatalogCard';
+import JoyasImage from '../assets/images/catalogo/joyas-img.webp'
+import CollaresImage from '../assets/images/catalogo/collares-img.webp';
+import PulserasImage from '../assets/images/catalogo/pulseras-img.webp';
 
 const catalogItems = [
     {
         title: 'Anillos',
         description: 'Exclusivos anillos para cada ocasión',
-        image: 'https://via.placeholder.com/400x300?text=Anillos',
+        image: JoyasImage
     },
     {
         title: 'Collares',
         description: 'Descubre nuestra colección',
-        image: null,
+        image: CollaresImage,
     },
     {
         title: 'Pulseras',
         description: 'Pulseras de oro, plata y más',
-        image: 'https://via.placeholder.com/400x300?text=Pulseras',
+        image: PulserasImage,
     },
 ];
 

@@ -1,12 +1,18 @@
-import React from 'react'
-import { useState } from "react";
+import React, { useState, useContext } from 'react'
+import { loginUser } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(null);
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!email || !password) {
@@ -14,8 +20,18 @@ const Login = () => {
             return;
         }
 
-        setError("");
-        console.log({ email, password });
+        try {
+            setLoading(true);
+            setError("");
+
+            const response = await loginUser({ email, password });
+            login(response.data.token);
+            navigate("/");
+        } catch {
+            setError("Credenciales incorrectas o error del servidor.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -46,8 +62,12 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <button className="btn btn-warning w-100 fw-semibold" type="submit">
-                        Acceder
+                    <button
+                        className="btn btn-warning w-100 fw-semibold"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? "Cargando..." : "Acceder"}
                     </button>
                     <div className="text-center mt-3">
                         <small className="text-muted">
@@ -64,4 +84,3 @@ const Login = () => {
 };
 
 export default Login;
-
