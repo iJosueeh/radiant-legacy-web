@@ -118,15 +118,42 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                                 className="btn btn-outline-light dropdown-toggle px-3"
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
                             >
-                                Bienvenido 👋
+                                Bienvenido, {user?.nombreCompleto?.split(" ")[0] || "Usuario"} 👋
                             </button>
                             <ul className={`dropdown-menu dropdown-menu-end shadow ${dropdownOpen ? "show" : ""}`}>
-                                <li><Link className="dropdown-item" to="/perfil">Tu Perfil</Link></li>
-                                <li><Link className="dropdown-item" to="/pedidos">Tus Pedidos</Link></li>
-                                <li><Link className="dropdown-item" to="/reseñas">Tus Reseñas</Link></li>
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/perfil"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Tu Perfil
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/pedidos"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Tus Pedidos
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/reseñas"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Tus Reseñas
+                                    </Link>
+                                </li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li>
-                                    <button className="dropdown-item text-danger logout-btn" onClick={handleLogout}>
+                                    <button
+                                        className="dropdown-item text-danger logout-btn"
+                                        onClick={handleLogout}
+                                    >
                                         Cerrar sesión
                                     </button>
                                 </li>

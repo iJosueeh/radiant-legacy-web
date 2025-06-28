@@ -6,6 +6,7 @@ export const loginUser = async ({ email, password }) => {
       email,
       password,
     });
+    localStorage.setItem("usuario", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     const backendMessage =
@@ -35,5 +36,16 @@ export const registerUser = async ({
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data || "Error en el registro");
+  }
+};
+
+export const updateProfile = async (userId, data) => {
+  try {
+    const response = await axiosInstance.put(`/auth/usuarios/${userId}`, data);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al actualizar perfil"
+    );
   }
 };

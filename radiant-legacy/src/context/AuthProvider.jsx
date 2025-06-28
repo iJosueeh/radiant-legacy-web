@@ -5,19 +5,28 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("userName");
-        if (storedUser) {
-            setUser(storedUser);
+        try {
+            const storedUser = localStorage.getItem("usuario");
+
+            if (storedUser && storedUser !== "undefined") {
+                setUser(JSON.parse(storedUser));
+            } else {
+                localStorage.removeItem("usuario");
+            }
+        } catch (error) {
+            console.error("Error al parsear usuario del localStorage:", error);
+            localStorage.removeItem("usuario"); // limpiar si hay error
+            setUser(null);
         }
     }, []);
 
-    const login = (nombreUsuario) => {
-        localStorage.setItem("userName", nombreUsuario);
-        setUser(nombreUsuario);
+    const login = (usuario) => {
+        localStorage.setItem("usuario", JSON.stringify(usuario));
+        setUser(usuario);
     };
 
     const logout = () => {
-        localStorage.removeItem("userName");
+        localStorage.removeItem("usuario");
         setUser(null);
     };
 
@@ -27,5 +36,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-

@@ -417,6 +417,37 @@ footer .hover\:text-warning:hover {
   margin-bottom: 1rem;
 }
 
+.dashboard-wrapper {
+  padding-top: 100px; 
+}
+
+.dashboard-glass {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-link {
+  color: #333;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #0d6efd;
+}
+
+.active-link {
+  background-color: rgba(0, 123, 255, 0.15);
+  color: #0d6efd;
+  font-weight: 600;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { loginUser } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import Swal from "sweetalert2";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -26,7 +27,17 @@ const Login = () => {
             setError("");
 
             const response = await loginUser({ email, password });
-            login(response.nombre);
+            login(response);
+
+            await Swal.fire({
+                title: '¡Bienvenido!',
+                text: 'Has iniciado sesión exitosamente.',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                timer: 1800,
+                showConfirmButton: false
+            });
+
             navigate("/");
         } catch (err) {
             setError(err.message || "Credenciales incorrectas.");

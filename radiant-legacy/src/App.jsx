@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { useEffect, useState } from "react";
 import './App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import Navbar from './components/navbar.jsx'
+import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import StatisticsSection from './components/StatisticsSection.jsx'
 import AboutUs from './components/AboutUs.jsx'
@@ -14,6 +14,7 @@ import Footer from './components/Footer.jsx'
 import LoadingOverlay from './components/LoadingOverlay.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/register.jsx'
+import Perfil from './pages/Perfil.jsx'
 
 function ScrollToHash() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function App() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/perfil" element={<Perfil />} />
           </Routes>
         </main>
         <Footer />
