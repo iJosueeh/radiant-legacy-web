@@ -1,10 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = ({ setIsLoadingOverlay }) => {
     const navbarRef = useRef(null);
     const navigate = useNavigate();
+    const { user, logout } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         const navbar = navbarRef.current;
@@ -18,7 +22,6 @@ const Navbar = ({ setIsLoadingOverlay }) => {
             }
         };
         window.addEventListener("scroll", handleScroll);
-
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -28,8 +31,37 @@ const Navbar = ({ setIsLoadingOverlay }) => {
         setTimeout(() => {
             navigate("/login");
             setIsLoading(false);
-            setIsLoadingOverlay(false); 
+            setIsLoadingOverlay(false);
         }, 1000);
+    };
+
+    const handleLogout = () => {
+        Swal.fire({
+            title: "¿Cerrar sesión?",
+            text: "Tu sesión actual se cerrará.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Sí, cerrar sesión",
+            cancelButtonText: "Cancelar",
+            customClass: {
+                popup: "rounded-4 shadow"
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout();
+                setDropdownOpen(false);
+                Swal.fire({
+                    title: "Sesión cerrada",
+                    text: "Has salido exitosamente.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                navigate("/");
+            }
+        });
     };
 
     return (
@@ -63,27 +95,44 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                         <li className="nav-item"><Link className="nav-link" to="/#contacto">Contacto</Link></li>
                     </ul>
 
-                    <button
-                        className={`btn btn-warning btn-login d-flex align-items-center px-3 ${isLoading ? "opacity-75 disabled" : ""
-                            }`}
-                        onClick={handleLoginClick}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (
-                            <>
-                                <span
-                                    className="spinner-border spinner-border-sm me-2"
-                                    role="status"
-                                    aria-hidden="true"
-                                ></span>
-                                Cargando…
-                            </>
-                        ) : (
-                            <>
-                                <i className="bi bi-person-circle me-2"></i> Iniciar sesión
-                            </>
-                        )}
-                    </button>
+                    {!user ? (
+                        <button
+                            className={`btn btn-warning btn-login d-flex align-items-center px-3 ${isLoading ? "opacity-75 disabled" : ""}`}
+                            onClick={handleLoginClick}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    Cargando…
+                                </>
+                            ) : (
+                                <>
+                                    <i className="bi bi-person-circle me-2"></i> Iniciar sesión
+                                </>
+                            )}
+                        </button>
+                    ) : (
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-outline-light dropdown-toggle px-3"
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                            >
+                                Bienvenido 👋
+                            </button>
+                            <ul className={`dropdown-menu dropdown-menu-end shadow ${dropdownOpen ? "show" : ""}`}>
+                                <li><Link className="dropdown-item" to="/perfil">Tu Perfil</Link></li>
+                                <li><Link className="dropdown-item" to="/pedidos">Tus Pedidos</Link></li>
+                                <li><Link className="dropdown-item" to="/reseñas">Tus Reseñas</Link></li>
+                                <li><hr className="dropdown-divider" /></li>
+                                <li>
+                                    <button className="dropdown-item text-danger logout-btn" onClick={handleLogout}>
+                                        Cerrar sesión
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>

@@ -11,6 +11,7 @@ const Login = () => {
 
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,10 +26,10 @@ const Login = () => {
             setError("");
 
             const response = await loginUser({ email, password });
-            login(response.data.token);
+            login(response.nombre);
             navigate("/");
-        } catch {
-            setError("Credenciales incorrectas o error del servidor.");
+        } catch (err) {
+            setError(err.message || "Credenciales incorrectas.");
         } finally {
             setLoading(false);
         }
@@ -54,13 +55,23 @@ const Login = () => {
                     </div>
                     <div className="mb-4">
                         <label className="form-label">Contraseña</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                        <div className="input-group">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                className="form-control"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                onClick={() => setShowPassword(!showPassword)}
+                                tabIndex={-1}
+                            >
+                                {showPassword ? "Ocultar" : "Mostrar"}
+                            </button>
+                        </div>
                     </div>
                     <button
                         className="btn btn-warning w-100 fw-semibold"
