@@ -464,6 +464,11 @@ footer .hover\:text-warning:hover {
   border-color: #007bff;
 }
 
+.carrito-page {
+  padding-top: 120px;
+  padding-bottom: 40px;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProductoPorId } from "../services/productoService";
 import {
   getResenasAprobadas,
@@ -9,10 +9,12 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import StarRatingInput from "../components/StarRatingInput";
 import StarRatingDisplay from "../components/StarRatingDisplay";
+import { agregarProductoAlCarrito } from "../services/carritoService";
 
 const ProductoPage = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [producto, setProducto] = useState(null);
   const [resenas, setResenas] = useState([]);
@@ -20,6 +22,7 @@ const ProductoPage = () => {
   const [loading, setLoading] = useState(true);
   const [comentario, setComentario] = useState("");
   const [calificacion, setCalificacion] = useState(5);
+  const [cantidad, setCantidad] = useState(1);
 
   const cargarDatos = useCallback(async () => {
     try {
@@ -45,6 +48,17 @@ const ProductoPage = () => {
   useEffect(() => {
     cargarDatos();
   }, [cargarDatos]);
+
+  const handleAgregarAlCarrito = () => {
+    if (!user) return alert("Debes iniciar sesión para añadir al carrito.");
+
+    if (cantidad < 1 || cantidad > producto.stock) {
+      return alert("Cantidad inválida.");
+    }
+
+    agregarProductoAlCarrito(producto, cantidad);
+    navigate("/carrito");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +91,7 @@ const ProductoPage = () => {
       </div>
 
       <div className="row align-items-center mb-5">
-        <div className="col-md-6">
+        <div className="col-md-6 mb-4 mb-md-0">
           {producto.imagen ? (
             <img src={producto.imagen} alt={producto.nombre} className="img-fluid rounded shadow-sm" />
           ) : (
@@ -86,12 +100,49 @@ const ProductoPage = () => {
             </div>
           )}
         </div>
+
         <div className="col-md-6">
-          <h2 className="fw-bold">{producto.nombre}</h2>
-          <p className="text-muted">{producto.descripcion}</p>
-          <p className="fs-4 fw-bold text-primary">S/. {producto.precio}</p>
-          <p className="text-muted">Stock disponible: <strong>{producto.stock}</strong></p>
-          <button className="btn btn-dark mt-3">Añadir al carrito</button>
+          <div className="card p-4 shadow-sm border-0 rounded-4 bg-white">
+            <h2 className="fw-bold mb-3">{producto.nombre}</h2>
+
+            <p className="text-muted mb-2">{producto.descripcion}</p>
+
+            <div className="d-flex align-items-center gap-3 mb-3">
+              <span className="fs-4 fw-bold text-primary">S/. {producto.precio.toFixed(2)}</span>
+              <span className={`badge px-3 py-2 ${producto.stock > 0 ? "bg-success" : "bg-danger"}`}>
+                {producto.stock > 0 ? "Disponible" : "Agotado"}
+              </span>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label text-muted">
+                <i className="bi bi-box-seam me-2"></i> Stock disponible:
+              </label>
+              <span className="fw-semibold">{producto.stock}</span>
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label">Cantidad:</label>
+              <input
+                type="number"
+                className="form-control w-50"
+                value={cantidad}
+                min="1"
+                max={producto.stock}
+                onChange={(e) => setCantidad(Number(e.target.value))}
+                disabled={producto.stock === 0}
+              />
+            </div>
+
+            <button
+              className="btn btn-dark w-100 d-flex justify-content-center align-items-center gap-2 py-2"
+              onClick={handleAgregarAlCarrito}
+              disabled={producto.stock === 0}
+            >
+              <i className="bi bi-cart-plus"></i>
+              Añadir al carrito
+            </button>
+          </div>
         </div>
       </div>
 
@@ -104,11 +155,8 @@ const ProductoPage = () => {
         resenas.map((resena) => (
           <div
             key={resena.id}
-            className="mb-3 p-3 bg-light rounded shadow-sm border resena-hover"
-            style={{
-              transition: "all 0.3s",
-              cursor: "default"
-            }}
+            className="mb-3 p-3 bg-light rounded shadow-sm border"
+            style={{ transition: "all 0.3s", cursor: "default" }}
           >
             <strong>Calificación:</strong>{" "}
             <StarRatingDisplay value={resena.calificacion} />

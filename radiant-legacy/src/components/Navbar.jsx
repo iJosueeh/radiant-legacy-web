@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../context/AuthContext";
+import { useCarritoCount } from "../hooks/useCarritoCount";
 
 const Navbar = ({ setIsLoadingOverlay }) => {
     const navbarRef = useRef(null);
@@ -9,6 +10,8 @@ const Navbar = ({ setIsLoadingOverlay }) => {
     const { user, logout } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const { count } = useCarritoCount();
+
 
     useEffect(() => {
         const navbar = navbarRef.current;
@@ -94,7 +97,14 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                         <li className="nav-item"><Link className="nav-link" to="/#sedes">Sedes</Link></li>
                         <li className="nav-item"><Link className="nav-link" to="/#contacto">Contacto</Link></li>
                     </ul>
-
+                    <Link to="/carrito" className="btn btn-outline-light position-relative me-3">
+                        <i className="bi bi-cart3 fs-5"></i>
+                        {count > 0 && (
+                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {count}
+                            </span>
+                        )}
+                    </Link>
                     {!user ? (
                         <button
                             className={`btn btn-warning btn-login d-flex align-items-center px-3 ${isLoading ? "opacity-75 disabled" : ""}`}
