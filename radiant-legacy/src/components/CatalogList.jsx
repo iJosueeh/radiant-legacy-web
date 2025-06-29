@@ -5,16 +5,19 @@ import PulserasImage from '../assets/images/catalogo/pulseras-img.webp';
 
 const catalogItems = [
     {
+        id: 1,
         title: 'Anillos',
         description: 'Exclusivos anillos para cada ocasión',
         image: JoyasImage
     },
     {
+        id: 2,
         title: 'Collares',
         description: 'Descubre nuestra colección',
         image: CollaresImage,
     },
     {
+        id: 3,
         title: 'Pulseras',
         description: 'Pulseras de oro, plata y más',
         image: PulserasImage,
@@ -36,9 +39,11 @@ const CatalogList = () => {
                     {catalogItems.map((item, index) => (
                         <div className="col-12 col-md-4" key={index}>
                             <CatalogCard
+                                id={item.id}
                                 title={item.title}
                                 description={item.description}
                                 image={item.image}
+                                isCategoria={true}
                             />
                         </div>
                     ))}

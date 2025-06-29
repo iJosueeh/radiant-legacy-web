@@ -15,6 +15,8 @@ import LoadingOverlay from './components/LoadingOverlay.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/register.jsx'
 import Perfil from './pages/Perfil.jsx'
+import CatalogoPage from './pages/CatalogoPage';
+import ProductoPage from './pages/ProductoPage.jsx'
 
 function ScrollToHash() {
   const location = useLocation();
@@ -61,6 +63,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/perfil" element={<Perfil />} />
+            <Route path="/catalogo/:id" element={<CatalogoPage />} />
+            <Route path="/producto/:id" element={<ProductoPage />} />
           </Routes>
         </main>
         <Footer />
