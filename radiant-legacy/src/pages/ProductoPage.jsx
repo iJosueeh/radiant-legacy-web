@@ -10,6 +10,7 @@ import { AuthContext } from "../context/AuthContext";
 import StarRatingInput from "../components/StarRatingInput";
 import StarRatingDisplay from "../components/StarRatingDisplay";
 import { agregarProductoAlCarrito } from "../services/carritoService";
+import { registrarProductoVisto } from "../services/historialService";
 
 const ProductoPage = () => {
   const { id } = useParams();
@@ -29,13 +30,17 @@ const ProductoPage = () => {
       const data = await getProductoPorId(id);
       setProducto(data);
 
+      if (user?.id && data?.id) {
+        await registrarProductoVisto(user.id, data.id);
+      }
+
       const resenasAprobadas = await getResenasAprobadas(id);
       setResenas(resenasAprobadas);
 
       if (user?.id) {
-        const resenaUsuario = await getResenasDelUsuario(id, user.id);
-        if (resenaUsuario.length > 0) {
-          setMiResena(resenaUsuario[0]);
+        const resenasUsuario = await getResenasDelUsuario(id, user.id);
+        if (resenasUsuario.length > 0) {
+          setMiResena(resenasUsuario[resenasUsuario.length - 1]);
         }
       }
     } catch (error) {
@@ -51,11 +56,9 @@ const ProductoPage = () => {
 
   const handleAgregarAlCarrito = () => {
     if (!user) return alert("Debes iniciar sesión para añadir al carrito.");
-
     if (cantidad < 1 || cantidad > producto.stock) {
       return alert("Cantidad inválida.");
     }
-
     agregarProductoAlCarrito(producto, cantidad);
     navigate("/carrito");
   };
@@ -104,7 +107,6 @@ const ProductoPage = () => {
         <div className="col-md-6">
           <div className="card p-4 shadow-sm border-0 rounded-4 bg-white">
             <h2 className="fw-bold mb-3">{producto.nombre}</h2>
-
             <p className="text-muted mb-2">{producto.descripcion}</p>
 
             <div className="d-flex align-items-center gap-3 mb-3">
@@ -153,11 +155,7 @@ const ProductoPage = () => {
         <p className="text-muted">Aún no hay reseñas aprobadas para este producto.</p>
       ) : (
         resenas.map((resena) => (
-          <div
-            key={resena.id}
-            className="mb-3 p-3 bg-light rounded shadow-sm border"
-            style={{ transition: "all 0.3s", cursor: "default" }}
-          >
+          <div key={resena.id} className="mb-3 p-3 bg-light rounded shadow-sm border">
             <strong>Calificación:</strong>{" "}
             <StarRatingDisplay value={resena.calificacion} />
             <br />
@@ -169,29 +167,29 @@ const ProductoPage = () => {
       <hr />
       <h5 className="mt-4">Deja tu reseña</h5>
 
-      {miResena ? (
+      {miResena && (
         <div className="alert alert-info">
-          Ya enviaste una reseña para este producto. Estado: <strong>{miResena.estado}</strong>
+          Ya enviaste una reseña antes. Última estado: <strong>{miResena.estado}</strong>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Calificación:</label>
-            <StarRatingInput value={calificacion} onChange={setCalificacion} />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Comentario:</label>
-            <textarea
-              className="form-control"
-              rows="3"
-              value={comentario}
-              onChange={(e) => setComentario(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">Enviar reseña</button>
-        </form>
       )}
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="form-label">Calificación:</label>
+          <StarRatingInput value={calificacion} onChange={setCalificacion} />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Comentario:</label>
+          <textarea
+            className="form-control"
+            rows="3"
+            value={comentario}
+            onChange={(e) => setComentario(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Enviar reseña</button>
+      </form>
     </div>
   );
 };

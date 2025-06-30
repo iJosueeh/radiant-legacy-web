@@ -28,12 +28,22 @@ const DashboardSidebar = () => {
                 </li>
                 <li>
                     <NavLink
-                        to="/reseñas"
+                        to="/resenas"
                         className={({ isActive }) =>
                             `nav-link d-flex align-items-center gap-2 sidebar-link ${isActive ? 'active-link' : ''}`
                         }
                     >
                         <i className="bi bi-chat-left-text"></i> Reseñas
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/historial"
+                        className={({ isActive }) =>
+                            `nav-link d-flex align-items-center gap-2 sidebar-link ${isActive ? 'active-link' : ''}`
+                        }
+                    >
+                        <i className="bi bi-clock-history"></i> Historial
                     </NavLink>
                 </li>
             </ul>

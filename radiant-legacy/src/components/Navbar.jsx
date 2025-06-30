@@ -152,10 +152,19 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                                 <li>
                                     <Link
                                         className="dropdown-item"
-                                        to="/reseñas"
+                                        to="/resenas"
                                         onClick={() => setDropdownOpen(false)}
                                     >
                                         Tus Reseñas
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/historial"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Tu Historial
                                     </Link>
                                 </li>
                                 <li><hr className="dropdown-divider" /></li>

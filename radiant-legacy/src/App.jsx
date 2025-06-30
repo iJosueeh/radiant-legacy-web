@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { useEffect, useState } from "react";
 import './App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;     
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import StatisticsSection from './components/StatisticsSection.jsx'
@@ -18,6 +21,8 @@ import Perfil from './pages/Perfil.jsx'
 import CatalogoPage from './pages/CatalogoPage';
 import ProductoPage from './pages/ProductoPage.jsx'
 import CarritoPage from './components/CarritoPage.jsx';
+import ResenasPage from "./pages/Resenas";
+import HistorialPage from './pages/Historial.jsx';
 
 function ScrollToHash() {
   const location = useLocation();
@@ -67,6 +72,8 @@ function App() {
             <Route path="/catalogo/:id" element={<CatalogoPage />} />
             <Route path="/producto/:id" element={<ProductoPage />} />
             <Route path="/carrito" element={<CarritoPage />} />
+            <Route path="/resenas" element={<ResenasPage />} />
+            <Route path="/historial" element={<HistorialPage />} />
           </Routes>
         </main>
         <Footer />
