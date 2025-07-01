@@ -1,7 +1,9 @@
 import React from 'react'
+import Swal from 'sweetalert2'
 import heroImage from '../assets/images/hero-image.webp'
 
 const Hero = () => {
+
     return (
         <section
             className="hero d-flex align-items-center justify-content-center text-center text-white position-relative"

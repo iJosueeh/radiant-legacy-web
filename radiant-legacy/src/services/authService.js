@@ -6,6 +6,7 @@ export const loginUser = async ({ email, password }) => {
       email,
       password,
     });
+    localStorage.removeItem("userInfo");
     localStorage.setItem("usuario", JSON.stringify(response.data));
     return response.data;
   } catch (error) {

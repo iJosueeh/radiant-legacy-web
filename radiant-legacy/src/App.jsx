@@ -1,10 +1,7 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { Routes, Route } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+
 import './App.css'
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import * as bootstrap from 'bootstrap';
-window.bootstrap = bootstrap;     
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import StatisticsSection from './components/StatisticsSection.jsx'
@@ -16,37 +13,27 @@ import Contacto from './components/Contacto.jsx'
 import Footer from './components/Footer.jsx'
 import LoadingOverlay from './components/LoadingOverlay.jsx'
 import Login from './pages/Login.jsx'
-import Register from './pages/register.jsx'
+import Register from './pages/Register.jsx'
 import Perfil from './pages/Perfil.jsx'
-import CatalogoPage from './pages/CatalogoPage';
+import CatalogoPage from './pages/CatalogoPage.jsx'
 import ProductoPage from './pages/ProductoPage.jsx'
-import CarritoPage from './components/CarritoPage.jsx';
-import ResenasPage from "./pages/Resenas";
-import HistorialPage from './pages/Historial.jsx';
+import CarritoPage from './components/CarritoPage.jsx'
+import ResenasPage from './pages/Resenas.jsx'
+import HistorialPage from './pages/Historial.jsx'
 
-function ScrollToHash() {
-  const location = useLocation();
-
+function ScrollToTop() {
   useEffect(() => {
-    if (location.hash) {
-      const element = document.querySelector(location.hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [location]);
-
-  return null;
+    window.scrollTo(0, 0)
+  }, [])
+  return null
 }
 
 function App() {
   const [isLoadingOverlay, setIsLoadingOverlay] = useState(false);
 
   return (
-    <Router>
-      <ScrollToHash />
+    <>
+      <ScrollToTop />
       <div className="d-flex flex-column min-vh-100">
         <LoadingOverlay show={isLoadingOverlay} />
         <Navbar setIsLoadingOverlay={setIsLoadingOverlay} />
@@ -78,8 +65,8 @@ function App() {
         </main>
         <Footer />
       </div>
-    </Router>
-  );
+    </>
+  )
 }
 
 export default App

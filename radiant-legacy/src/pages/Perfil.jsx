@@ -13,6 +13,11 @@ const Perfil = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    if (!user?.id) {
+        Swal.fire("Error", "No se pudo obtener el usuario actual.", "error");
+        return null;
+    }
+
     const handleSave = async (e) => {
         e.preventDefault();
         if (password && password !== confirmPassword) {
@@ -38,6 +43,7 @@ const Perfil = () => {
         <DashboardLayout>
             <div className="card shadow-sm p-4 border-0 rounded-4">
                 <h3 className="mb-4 fw-bold text-secondary">Editar Perfil</h3>
+
                 <form onSubmit={handleSave} className="d-flex flex-column gap-3">
                     <div>
                         <label className="form-label fw-semibold">Nombre completo</label>

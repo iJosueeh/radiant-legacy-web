@@ -11,9 +11,19 @@ const Historial = () => {
   useEffect(() => {
     const cargarHistorial = async () => {
       try {
+        console.log("Usuario desde contexto:", user); // 👈 Diagnóstico
         if (user?.id) {
           const data = await obtenerHistorialUsuario(user.id);
-          setHistorial((data || []).reverse()); // Evita error si data es null
+          console.log("Historial recibido:", data); // 👈 Diagnóstico
+
+          if (Array.isArray(data)) {
+            setHistorial(data.reverse());
+          } else {
+            console.warn("Historial recibido no es un array:", data);
+            setHistorial([]);
+          }
+        } else {
+          console.warn("ID de usuario inválido:", user?.id);
         }
       } catch (error) {
         console.error("Error al cargar historial:", error);

@@ -5,6 +5,7 @@ import { getResenasPorUsuario, actualizarResena, eliminarResena } from "../servi
 import StarRatingDisplay from "../components/StarRatingDisplay";
 import { ToastContainer, toast } from "react-toastify";
 import Swal from "sweetalert2";
+import Modal from "bootstrap/js/dist/modal";
 
 const Resenas = () => {
     const { user } = useContext(AuthContext);
@@ -34,9 +35,8 @@ const Resenas = () => {
         setFormComentario(resena.comentario);
         setFormCalificacion(resena.calificacion);
 
-        const modal = new window.bootstrap.Modal(
-            document.getElementById("modalEditarResena")
-        );
+        const modalElement = document.getElementById("modalEditarResena");
+        const modal = new Modal(modalElement);
         modal.show();
     };
 
@@ -54,44 +54,34 @@ const Resenas = () => {
             setResenas(nuevas);
             toast.success("Reseña actualizada correctamente");
 
-            const modal = window.bootstrap.Modal.getInstance(
-                document.getElementById("modalEditarResena")
-            );
+            const modalElement = document.getElementById("modalEditarResena");
+            const modal = Modal.getInstance(modalElement);
             modal.hide();
         } catch (error) {
             console.error("Error al actualizar reseña:", error);
             toast.error("Ocurrió un error al guardar los cambios.");
         }
-
     };
 
     const handleEliminar = (resena) => {
         Swal.fire({
-            title: '¿Estás seguro?',
+            title: "¿Estás seguro?",
             text: "Esta acción no se puede deshacer.",
-            icon: 'warning',
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await eliminarResena(resena.id, user.id);
                     setResenas((prev) => prev.filter((r) => r.id !== resena.id));
-                    Swal.fire(
-                        'Eliminada',
-                        'La reseña ha sido eliminada correctamente.',
-                        'success'
-                    );
+                    Swal.fire("Eliminada", "La reseña ha sido eliminada correctamente.", "success");
                 } catch (error) {
                     console.error("Error al eliminar reseña:", error);
-                    Swal.fire(
-                        'Error',
-                        'Ocurrió un problema al eliminar la reseña.',
-                        'error'
-                    );
+                    Swal.fire("Error", "Ocurrió un problema al eliminar la reseña.", "error");
                 }
             }
         });
@@ -148,7 +138,6 @@ const Resenas = () => {
                                     <i className="bi bi-trash me-1"></i> Eliminar
                                 </button>
                             </div>
-
                         </div>
                     ))
                 )}
