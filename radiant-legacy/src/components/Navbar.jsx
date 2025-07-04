@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
+import { HashLink } from 'react-router-hash-link';
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../context/AuthContext";
@@ -93,9 +94,9 @@ const Navbar = ({ setIsLoadingOverlay }) => {
         <nav
             id="navbar"
             ref={navbarRef}
-            className="navbar navbar-expand-lg fixed-top navbar-dark px-4 py-3"
+            className="navbar navbar-expand-lg fixed-top navbar-dark px-3 py-3 w-100 overflow-hidden"
         >
-            <div className="container-fluid">
+            <div className="container-fluid px-0">
                 <Link className="navbar-brand fw-bold fs-4" to="/" onClick={closeNavbar}>
                     💎 Radiant Legacy
                 </Link>
@@ -117,36 +118,42 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                 >
                     <ul className="navbar-nav mb-2 mb-lg-0 me-4 gap-3">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/#about-us" onClick={closeNavbar}>
+                            <HashLink smooth className="nav-link" to="/#about-us" onClick={closeNavbar}>
                                 Sobre Nosotros
-                            </Link>
+                            </HashLink>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/#catalogo" onClick={closeNavbar}>
+                            <HashLink smooth className="nav-link" to="/#catalogo" onClick={closeNavbar}>
                                 Colecciones
-                            </Link>
+                            </HashLink>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/#sedes" onClick={closeNavbar}>
+                            <HashLink smooth className="nav-link" to="/#sedes" onClick={closeNavbar}>
                                 Sedes
-                            </Link>
+                            </HashLink>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/#contacto" onClick={closeNavbar}>
+                            <HashLink smooth className="nav-link" to="/#contacto" onClick={closeNavbar}>
                                 Contacto
-                            </Link>
+                            </HashLink>
                         </li>
                     </ul>
-
-                    <Link to="/carrito" onClick={closeNavbar} className="btn btn-outline-light position-relative me-3">
+                    <Link
+                        to="/carrito"
+                        onClick={closeNavbar}
+                        className="btn btn-outline-light position-relative me-3"
+                        style={{ overflow: "visible", maxWidth: "100%" }}
+                    >
                         <i className="bi bi-cart3 fs-5"></i>
                         {count > 0 && (
-                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <span
+                                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                style={{ transform: "translate(-50%, -50%)", whiteSpace: "nowrap" }}
+                            >
                                 {count}
                             </span>
                         )}
                     </Link>
-
                     {!user ? (
                         <button
                             className={`btn btn-warning btn-login d-flex align-items-center px-3 ${isLoading ? "opacity-75 disabled" : ""}`}
