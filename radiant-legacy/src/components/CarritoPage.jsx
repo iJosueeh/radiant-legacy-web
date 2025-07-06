@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { crearPedido } from "../services/pedidoService";
@@ -8,12 +8,61 @@ import {
   guardarCarrito,
 } from "../services/carritoService";
 
+const ProductoCarrito = ({ item, actualizarCantidad, eliminarProducto }) => (
+  <div className="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+    <div className="d-flex align-items-center gap-3">
+      {item.imagen && (
+        <img
+          src={item.imagen}
+          alt={item.nombre}
+          style={{
+            width: "60px",
+            height: "60px",
+            objectFit: "cover",
+          }}
+          className="rounded"
+        />
+      )}
+      <div>
+        <strong>{item.nombre}</strong>
+        <br />
+        <span>Precio: S/. {item.precio.toFixed(2)}</span>
+        <br />
+        <input
+          type="number"
+          min="1"
+          className="form-control form-control-sm w-50 mt-1"
+          value={item.cantidad}
+          onChange={(e) => actualizarCantidad(item.id, e.target.value)}
+        />
+      </div>
+    </div>
+    <button
+      className="btn btn-danger btn-sm"
+      onClick={() => eliminarProducto(item.id)}
+    >
+      Eliminar
+    </button>
+  </div>
+);
+
 const CarritoPage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [carrito, setCarrito] = useState(obtenerCarrito());
   const [tipoEnvio, setTipoEnvio] = useState("NORMAL");
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setCarrito(obtenerCarrito());
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const subtotal = carrito.reduce(
     (acc, item) => acc + item.precio * item.cantidad,
@@ -23,14 +72,14 @@ const CarritoPage = () => {
   const total = subtotal - descuento;
 
   const handleOrdenar = async () => {
-    if (!user || !user.correo) {
+    if (!user || !user.email) {
       alert("Debes iniciar sesión con un correo válido para realizar el pedido.");
       return navigate("/login");
     }
 
     const pedido = {
       id_cliente: user.id,
-      tipoEnvio, 
+      tipoEnvio,
       subtotal,
       descuento,
       total,
@@ -56,13 +105,17 @@ const CarritoPage = () => {
   };
 
   const actualizarCantidad = (id, nuevaCantidad) => {
+    const cantidad = Math.max(1, Number(nuevaCantidad));
     const actualizado = carrito.map((item) =>
-      item.id === id
-        ? { ...item, cantidad: Math.max(1, Number(nuevaCantidad)) }
-        : item
+      item.id === id ? { ...item, cantidad } : item
     );
     guardarCarrito(actualizado);
     setCarrito(actualizado);
+  };
+
+  const eliminarProducto = (idProducto) => {
+    eliminarProductoDelCarrito(idProducto);
+    setCarrito(obtenerCarrito());
   };
 
   return (
@@ -75,49 +128,12 @@ const CarritoPage = () => {
         <div className="row">
           <div className="col-md-8">
             {carrito.map((item) => (
-              <div
+              <ProductoCarrito
                 key={item.id}
-                className="d-flex justify-content-between align-items-center mb-3 p-3 border rounded"
-              >
-                <div className="d-flex align-items-center gap-3">
-                  {item.imagen && (
-                    <img
-                      src={item.imagen}
-                      alt={item.nombre}
-                      style={{
-                        width: "60px",
-                        height: "60px",
-                        objectFit: "cover",
-                      }}
-                      className="rounded"
-                    />
-                  )}
-                  <div>
-                    <strong>{item.nombre}</strong>
-                    <br />
-                    <span>Precio: S/. {item.precio.toFixed(2)}</span>
-                    <br />
-                    <input
-                      type="number"
-                      min="1"
-                      className="form-control form-control-sm w-50 mt-1"
-                      value={item.cantidad}
-                      onChange={(e) =>
-                        actualizarCantidad(item.id, e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => {
-                    eliminarProductoDelCarrito(item.id);
-                    setCarrito(obtenerCarrito());
-                  }}
-                >
-                  Eliminar
-                </button>
-              </div>
+                item={item}
+                actualizarCantidad={actualizarCantidad}
+                eliminarProducto={eliminarProducto}
+              />
             ))}
           </div>
 
