@@ -7,7 +7,6 @@ import { useCarritoCount } from "../hooks/useCarritoCount";
 import Collapse from "bootstrap/js/dist/collapse";
 
 const Navbar = ({ setIsLoadingOverlay }) => {
-
     const navbarRef = useRef(null);
     const navigate = useNavigate();
     const { user, logout } = useContext(AuthContext);
@@ -43,7 +42,6 @@ const Navbar = ({ setIsLoadingOverlay }) => {
             setIsLoadingOverlay(false);
         }, 1000);
     };
-
 
     const handleLogout = () => {
         Swal.fire({
@@ -94,7 +92,7 @@ const Navbar = ({ setIsLoadingOverlay }) => {
         <nav
             id="navbar"
             ref={navbarRef}
-            className="navbar navbar-expand-lg fixed-top navbar-dark px-3 py-3 w-100 overflow-hidden"
+            className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark px-3 py-3 w-100"
         >
             <div className="container-fluid px-0">
                 <Link className="navbar-brand fw-bold fs-4" to="/" onClick={closeNavbar}>
@@ -112,10 +110,7 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div
-                    className="collapse navbar-collapse justify-content-end"
-                    id="navbarContent"
-                >
+                <div className="collapse navbar-collapse justify-content-end" id="navbarContent">
                     <ul className="navbar-nav mb-2 mb-lg-0 me-4 gap-3">
                         <li className="nav-item">
                             <HashLink smooth className="nav-link" to="/#about-us" onClick={closeNavbar}>
@@ -142,14 +137,10 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                         to="/carrito"
                         onClick={closeNavbar}
                         className="btn btn-outline-light position-relative me-3"
-                        style={{ overflow: "visible", maxWidth: "100%" }}
                     >
                         <i className="bi bi-cart3 fs-5"></i>
                         {count > 0 && (
-                            <span
-                                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                style={{ transform: "translate(-50%, -50%)", whiteSpace: "nowrap" }}
-                            >
+                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 {count}
                             </span>
                         )}
@@ -176,10 +167,11 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                             <button
                                 className="btn btn-outline-light dropdown-toggle px-3"
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
+                                aria-expanded={dropdownOpen}
                             >
                                 Bienvenido, {user?.nombreCompleto?.split(" ")[0] || "Usuario"} 👋
                             </button>
-                            <ul className={`dropdown-menu dropdown-menu-end shadow ${dropdownOpen ? "show" : ""}`}>
+                            <ul className={`dropdown-menu dropdown-menu-end shadow ${dropdownOpen ? "show" : ""}`} style={{ zIndex: 1050 }}>
                                 <li>
                                     <Link className="dropdown-item" to="/perfil" onClick={() => setDropdownOpen(false)}>
                                         Tu Perfil

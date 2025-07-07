@@ -9,7 +9,7 @@ import {
 } from "../services/carritoService";
 
 const ProductoCarrito = ({ item, actualizarCantidad, eliminarProducto }) => (
-  <div className="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+  <div className="d-flex justify-content-between align-items-center mb-3 p-3 border rounded shadow-sm bg-white">
     <div className="d-flex align-items-center gap-3">
       {item.imagen && (
         <img
@@ -72,23 +72,21 @@ const CarritoPage = () => {
   const total = subtotal - descuento;
 
   const handleOrdenar = async () => {
-    if (!user || !user.email) {
+    if (!user || !user.id || !user.email) {
       alert("Debes iniciar sesión con un correo válido para realizar el pedido.");
       return navigate("/login");
     }
 
     const pedido = {
-      id_cliente: user.id,
+      idCliente: user.id,
+      idCupon: null,
       tipoEnvio,
       subtotal,
       descuento,
-      total,
-      estado: "PENDIENTE",
       detalles: carrito.map((item) => ({
-        id_producto: item.id,
+        idProducto: item.id,
         cantidad: item.cantidad,
-        precio_unitario: item.precio,
-        sub_total: item.precio * item.cantidad,
+        precioUnitario: item.precio,
       })),
     };
 
@@ -123,7 +121,7 @@ const CarritoPage = () => {
       <h2 className="mb-4">Tu carrito</h2>
 
       {carrito.length === 0 ? (
-        <p>No hay productos en el carrito.</p>
+        <div className="alert alert-warning text-center">No hay productos en el carrito.</div>
       ) : (
         <div className="row">
           <div className="col-md-8">
