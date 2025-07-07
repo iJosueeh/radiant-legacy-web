@@ -33,14 +33,6 @@ export const actualizarResena = async (idResena, data) => {
 };
 
 export const eliminarResena = async (idResena, idUsuario) => {
-  const response = await fetch(`/resenas/${idResena}/usuario/${idUsuario}`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
-  }
-
-  return true;
+  const response = await axiosInstance.delete(`/resenas/${idResena}/usuario/${idUsuario}`);
+  return response.data;
 };
