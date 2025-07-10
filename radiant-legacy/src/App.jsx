@@ -20,6 +20,7 @@ import ProductoPage from './pages/ProductoPage.jsx'
 import CarritoPage from './components/CarritoPage.jsx'
 import ResenasPage from './pages/Resenas.jsx'
 import HistorialPage from './pages/Historial.jsx'
+import Pedidos from './pages/Pedidos.jsx'
 
 function ScrollToTop() {
   useEffect(() => {
@@ -61,6 +62,7 @@ function App() {
             <Route path="/carrito" element={<CarritoPage />} />
             <Route path="/resenas" element={<ResenasPage />} />
             <Route path="/historial" element={<HistorialPage />} />
+            <Route path="/pedidos" element={<Pedidos />} />
           </Routes>
         </main>
         <Footer />

@@ -7,6 +7,7 @@ import {
   obtenerCarrito,
   guardarCarrito,
 } from "../services/carritoService";
+import Swal from "sweetalert2";
 
 const ProductoCarrito = ({ item, actualizarCantidad, eliminarProducto }) => (
   <div className="d-flex justify-content-between align-items-center mb-3 p-3 border rounded shadow-sm bg-white">
@@ -15,11 +16,7 @@ const ProductoCarrito = ({ item, actualizarCantidad, eliminarProducto }) => (
         <img
           src={item.imagen}
           alt={item.nombre}
-          style={{
-            width: "60px",
-            height: "60px",
-            objectFit: "cover",
-          }}
+          style={{ width: "60px", height: "60px", objectFit: "cover" }}
           className="rounded"
         />
       )}
@@ -73,8 +70,13 @@ const CarritoPage = () => {
 
   const handleOrdenar = async () => {
     if (!user || !user.id || !user.email) {
-      alert("Debes iniciar sesión con un correo válido para realizar el pedido.");
-      return navigate("/login");
+      Swal.fire({
+        icon: "warning",
+        title: "Inicia sesión",
+        text: "Debes iniciar sesión con un correo válido para realizar el pedido.",
+        confirmButtonText: "Ir a iniciar sesión",
+      }).then(() => navigate("/login"));
+      return;
     }
 
     const pedido = {
@@ -92,13 +94,31 @@ const CarritoPage = () => {
 
     try {
       await crearPedido(pedido);
-      alert("Pedido realizado correctamente. ¡Gracias por tu compra!");
+
+      const primerProducto = carrito[0];
+
+      await Swal.fire({
+        icon: "success",
+        title: "Pedido realizado",
+        text: "¡Gracias por tu compra!",
+        confirmButtonColor: "#3085d6",
+      });
+
       localStorage.removeItem("carrito");
       setCarrito([]);
-      navigate("/catalogo");
+
+      if (primerProducto?.id) {
+        navigate(`/producto/${primerProducto.id}`);
+      } else {
+        navigate(`/catalogo/${primerProducto.id}`);
+      }
     } catch (error) {
       console.error("Error al crear el pedido:", error);
-      alert("Hubo un problema al procesar tu pedido.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al procesar tu pedido. Intenta nuevamente.",
+      });
     }
   };
 
@@ -109,11 +129,35 @@ const CarritoPage = () => {
     );
     guardarCarrito(actualizado);
     setCarrito(actualizado);
+
+    // Opcional: mensaje al usuario
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "info",
+      title: "Cantidad actualizada",
+      showConfirmButton: false,
+      timer: 1200,
+    });
   };
 
   const eliminarProducto = (idProducto) => {
-    eliminarProductoDelCarrito(idProducto);
-    setCarrito(obtenerCarrito());
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Este producto será eliminado del carrito.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#aaa",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eliminarProductoDelCarrito(idProducto);
+        setCarrito(obtenerCarrito());
+        Swal.fire("Eliminado", "El producto fue eliminado del carrito.", "success");
+      }
+    });
   };
 
   return (
@@ -140,9 +184,7 @@ const CarritoPage = () => {
               <h5>Resumen del pedido</h5>
               <p>Subtotal: S/. {subtotal.toFixed(2)}</p>
               <p>Descuento: S/. {descuento.toFixed(2)}</p>
-              <p>
-                <strong>Total: S/. {total.toFixed(2)}</strong>
-              </p>
+              <p><strong>Total: S/. {total.toFixed(2)}</strong></p>
 
               <div className="mb-3">
                 <label className="form-label">Tipo de envío:</label>
