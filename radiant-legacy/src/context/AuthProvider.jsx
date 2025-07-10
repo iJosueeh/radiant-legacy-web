@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
       if (storedData && storedData !== "undefined") {
         const { usuario, expiracion } = JSON.parse(storedData);
-        const ahora = new Date().getTime();
+        const ahora = Date.now();
 
         if (expiracion && ahora < expiracion) {
           setUser(usuario);
@@ -36,8 +36,6 @@ export const AuthProvider = ({ children }) => {
             navigate("/login");
           });
         }
-      } else {
-        localStorage.removeItem("usuario");
       }
     } catch (error) {
       console.error("Error al leer sesión:", error);
@@ -48,12 +46,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
-  const login = (usuario) => {
-    const ahora = new Date().getTime();
+  const login = (response) => {
+    const ahora = Date.now();
+
+    const usuario = response.usuario;
     const dataConTiempo = {
       usuario,
       expiracion: ahora + EXPIRACION_MS,
     };
+
     localStorage.setItem("usuario", JSON.stringify(dataConTiempo));
     setUser(usuario);
   };
@@ -61,6 +62,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("usuario");
     setUser(null);
+    navigate("/login");
   };
 
   return (

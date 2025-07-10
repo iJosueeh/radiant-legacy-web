@@ -27,6 +27,7 @@ const Login = () => {
             setError("");
 
             const response = await loginUser({ email, password });
+
             login(response);
 
             await Swal.fire({
@@ -38,13 +39,21 @@ const Login = () => {
                 showConfirmButton: false
             });
 
-            navigate("/");
+            const rol = response?.rol || response?.usuario?.rol;
+
+            if (rol === "ADMIN") {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
+
         } catch (err) {
             setError(err.message || "Credenciales incorrectas.");
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <section className="min-vh-100 d-flex align-items-center justify-content-center bg-light pt-5">

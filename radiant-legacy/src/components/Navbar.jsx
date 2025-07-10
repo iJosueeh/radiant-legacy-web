@@ -192,6 +192,18 @@ const Navbar = ({ setIsLoadingOverlay }) => {
                                         Tu Historial
                                     </Link>
                                 </li>
+
+                                {user.rol === "ADMIN" && (
+                                    <>
+                                        <li><hr className="dropdown-divider" /></li>
+                                        <li>
+                                            <Link className="dropdown-item text-primary fw-semibold" to="/admin" onClick={() => setDropdownOpen(false)}>
+                                                Panel Admin
+                                            </Link>
+                                        </li>
+                                    </>
+                                )}
+
                                 <li><hr className="dropdown-divider" /></li>
                                 <li>
                                     <button className="dropdown-item text-danger logout-btn" onClick={handleLogout}>

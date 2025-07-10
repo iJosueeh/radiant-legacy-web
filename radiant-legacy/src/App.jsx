@@ -22,6 +22,12 @@ import ResenasPage from './pages/Resenas.jsx'
 import HistorialPage from './pages/Historial.jsx'
 import Pedidos from './pages/Pedidos.jsx'
 
+// Rutas del administrador
+import AdminLayout from './layouts/AdminLayout.jsx'
+import AdminInicio from './admin/AdminInicio.jsx'
+import RutaProtegidaAdmin from './routes/RutaProtegidaAdmin.jsx'
+import AdminUsuarios from './admin/AdminUsuarios.jsx'
+
 function ScrollToTop() {
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -30,7 +36,7 @@ function ScrollToTop() {
 }
 
 function App() {
-  const [isLoadingOverlay, setIsLoadingOverlay] = useState(false);
+  const [isLoadingOverlay, setIsLoadingOverlay] = useState(false)
 
   return (
     <>
@@ -40,6 +46,7 @@ function App() {
         <Navbar setIsLoadingOverlay={setIsLoadingOverlay} />
         <main className="flex-grow-1">
           <Routes>
+            {/* Rutas públicas / usuario */}
             <Route
               path="/"
               element={
@@ -63,6 +70,19 @@ function App() {
             <Route path="/resenas" element={<ResenasPage />} />
             <Route path="/historial" element={<HistorialPage />} />
             <Route path="/pedidos" element={<Pedidos />} />
+
+            {/* Rutas del admin protegidas */}
+            <Route
+              path="/admin"
+              element={
+                <RutaProtegidaAdmin>
+                  <AdminLayout />
+                </RutaProtegidaAdmin>
+              }
+            >
+              <Route index element={<AdminInicio />} />
+              <Route path="/admin/usuarios" element={<AdminUsuarios />} />
+            </Route>
           </Routes>
         </main>
         <Footer />

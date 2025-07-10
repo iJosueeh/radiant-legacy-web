@@ -560,3 +560,7 @@ footer .hover\:text-warning:hover {
 .read-the-docs {
   color: #888;
 }
+
+.admin-layout {
+  padding-top: 80px;
+}
