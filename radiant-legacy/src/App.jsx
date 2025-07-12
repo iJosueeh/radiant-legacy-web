@@ -27,6 +27,8 @@ import AdminLayout from './layouts/AdminLayout.jsx'
 import AdminInicio from './admin/AdminInicio.jsx'
 import RutaProtegidaAdmin from './routes/RutaProtegidaAdmin.jsx'
 import AdminUsuarios from './admin/AdminUsuarios.jsx'
+import AdminProductos from './admin/AdminProductos.jsx'
+import AdminPedidos from './admin/AdminPedidos.jsx'
 
 function ScrollToTop() {
   useEffect(() => {
@@ -82,6 +84,8 @@ function App() {
             >
               <Route index element={<AdminInicio />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
+              <Route path="/admin/productos" element={<AdminProductos />} />
+              <Route path="/admin/pedidos" element={<AdminPedidos />} />
             </Route>
           </Routes>
         </main>

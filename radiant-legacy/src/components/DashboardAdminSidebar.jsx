@@ -31,6 +31,26 @@ const DashboardAdminSidebar = () => {
         </li>
         <li>
           <NavLink
+            to="/admin/productos"
+            className={({ isActive }) =>
+              `nav-link d-flex align-items-center gap-2 ${isActive ? 'text-primary fw-semibold' : 'text-dark'}`
+            }
+          >
+            <i className="bi bi-box-seam"></i> Productos
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/admin/pedidos"
+            className={({ isActive }) =>
+              `nav-link d-flex align-items-center gap-2 ${isActive ? 'text-primary fw-semibold' : 'text-dark'}`
+            }
+          >
+            <i className="bi bi-truck"></i> Pedidos
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
             to="/admin/citas"
             className={({ isActive }) =>
               `nav-link d-flex align-items-center gap-2 ${isActive ? 'text-primary fw-semibold' : 'text-dark'}`
