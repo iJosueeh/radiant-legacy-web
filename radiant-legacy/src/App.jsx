@@ -29,6 +29,9 @@ import RutaProtegidaAdmin from './routes/RutaProtegidaAdmin.jsx'
 import AdminUsuarios from './admin/AdminUsuarios.jsx'
 import AdminProductos from './admin/AdminProductos.jsx'
 import AdminPedidos from './admin/AdminPedidos.jsx'
+import AdminCitas from './admin/AdminCitas.jsx'
+import AdminResenas from './admin/AdminResenas.jsx'
+import AdminLogs from './admin/AdminLogs.jsx'
 
 function ScrollToTop() {
   useEffect(() => {
@@ -86,6 +89,9 @@ function App() {
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
               <Route path="/admin/productos" element={<AdminProductos />} />
               <Route path="/admin/pedidos" element={<AdminPedidos />} />
+              <Route path="/admin/citas" element={<AdminCitas />} />
+              <Route path="/admin/resenas" element={<AdminResenas />} />
+              <Route path="/admin/logs" element={<AdminLogs />} />
             </Route>
           </Routes>
         </main>
