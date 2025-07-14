@@ -98,9 +98,9 @@ const AdminCitas = () => {
 
     const tipoContactoTexto = (valor) => {
         const mapa = {
-            0: 'WhatsApp',
-            1: 'Llamada',
-            2: 'Email',
+            WHATSAPP: 'WhatsApp',
+            TELEFONO: 'Llamada',
+            EMAIL: 'Email',
         };
 
         return mapa[valor] || '—';

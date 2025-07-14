@@ -64,6 +64,7 @@ const AdminProductos = () => {
             } else {
                 await axiosInstance.post("/productos", productoActual);
                 Swal.fire("Creado", "Producto agregado correctamente", "success");
+                console.log("Producto guardado:", productoActual); // 👈 Diagnóstico
             }
             setShowModal(false);
             fetchProductos();

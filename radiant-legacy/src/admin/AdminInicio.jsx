@@ -20,15 +20,7 @@ const AdminInicio = () => {
           </Card>
         </div>
 
-        <div className="col-md-4">
-          <Card className="shadow-sm border-0">
-            <CardBody>
-              <h5 className="fw-bold">Gestión de Citas</h5>
-              <p className="text-muted">Revisa y gestiona todas las citas agendadas por los usuarios.</p>
-              <Link to="/admin/citas" className="btn btn-outline-warning w-100">Ir a citas</Link>
-            </CardBody>
-          </Card>
-        </div>
+
 
         <div className="col-md-4">
           <Card className="shadow-sm border-0">
@@ -40,15 +32,7 @@ const AdminInicio = () => {
           </Card>
         </div>
 
-        <div className="col-md-4">
-          <Card className="shadow-sm border-0">
-            <CardBody>
-              <h5 className="fw-bold">Gestión de Reseñas</h5>
-              <p className="text-muted">Modera las reseñas enviadas por los clientes sobre los productos.</p>
-              <Link to="/admin/resenas" className="btn btn-outline-success w-100">Ir a reseñas</Link>
-            </CardBody>
-          </Card>
-        </div>
+
         <div className="col-md-4">
           <Card className="shadow-sm border-0">
             <CardBody>
