@@ -42,7 +42,7 @@ const Hero = () => {
                 <p className="lead mb-4 fs-5 opacity-90">
                     La joyería que hace brillar cada momento
                 </p>
-                <a href="#colecciones" className="btn btn-warning btn-lg px-4 py-2 shadow-sm">
+                <a href="#catalogo" className="btn btn-warning btn-lg px-4 py-2 shadow-sm">
                     Ver Colecciones
                 </a>
             </div>
