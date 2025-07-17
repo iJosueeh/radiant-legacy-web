@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
+import { registrarAccionAdmin } from '../services/adminLogService';
+import { AuthContext } from '../context/AuthContext';
 
 const AdminUsuarios = () => {
+  const { user } = useContext(AuthContext);
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -30,6 +33,17 @@ const AdminUsuarios = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+
+      console.log("Registrando acción con adminId:", user?.id);
+      await registrarAccionAdmin({
+        accion: estadoActual === "ACTIVO" ? "Desactivación de usuario" : "Activación de usuario",
+        descripcion: `El administrador ${user.nombreCompleto} ${estadoActual === "ACTIVO" ? "desactivó" : "activó"} al usuario con ID ${id}.`,
+        tipo: "USUARIO",
+        adminId: user.id
+      });
+
+      console.log("Registrando acción con adminId:", user?.id);
+
       fetchUsuarios();
     } catch {
       Swal.fire("Error", "No se pudo cambiar el estado del usuario", "error");
@@ -44,6 +58,13 @@ const AdminUsuarios = () => {
   const handleGuardarCambios = async () => {
     try {
       await axiosInstance.put(`/auth/usuarios/${usuarioActual.id}`, usuarioActual);
+
+      await registrarAccionAdmin({
+        accion: "Edición de usuario",
+        descripcion: `El administrador ${user.nombreCompleto} editó al usuario con ID ${usuarioActual.id}.`,
+        tipo: "USUARIO",
+        adminId: user.id
+      });
       setShowModal(false);
       fetchUsuarios();
       Swal.fire("Actualizado", "Usuario actualizado correctamente", "success");
@@ -68,6 +89,13 @@ const AdminUsuarios = () => {
           await axiosInstance.put(`/auth/usuarios/${id}/desactivar`);
           fetchUsuarios();
           Swal.fire("Eliminado", "El usuario fue desactivado.", "success");
+
+          await registrarAccionAdmin({
+            accion: "Eliminación de usuario",
+            descripcion: `El administrador ${user.nombreCompleto} eliminó (desactivó) al usuario con ID ${id}.`,
+            tipo: "USUARIO",
+            adminId: user.id
+          });
         } catch {
           Swal.fire("Error", "No se pudo eliminar el usuario", "error");
         }
@@ -130,9 +158,8 @@ const AdminUsuarios = () => {
 
                     <div className="d-flex justify-content-between align-items-center mt-auto">
                       <span
-                        className={`badge rounded-pill ${
-                          usuario.estado === "ACTIVO" ? "bg-success" : "bg-secondary"
-                        }`}
+                        className={`badge rounded-pill ${usuario.estado === "ACTIVO" ? "bg-success" : "bg-secondary"
+                          }`}
                       >
                         {usuario.estado}
                       </span>
@@ -149,11 +176,10 @@ const AdminUsuarios = () => {
                         <i className="bi bi-pencil-square me-1"></i> Editar
                       </button>
                       <button
-                        className={`btn btn-sm w-100 ${
-                          usuario.estado === "ACTIVO"
-                            ? "btn-outline-danger"
-                            : "btn-outline-success"
-                        }`}
+                        className={`btn btn-sm w-100 ${usuario.estado === "ACTIVO"
+                          ? "btn-outline-danger"
+                          : "btn-outline-success"
+                          }`}
                         onClick={() => toggleEstado(usuario.id, usuario.estado)}
                       >
                         {usuario.estado === "ACTIVO" ? "Desactivar" : "Activar"}

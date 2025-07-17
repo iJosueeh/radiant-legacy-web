@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import Swal from 'sweetalert2';
 import { Table, Button, Badge, Modal } from 'react-bootstrap';
+import { registrarAccionAdmin } from '../services/adminLogService';
+import { AuthContext } from '../context/AuthContext';
 
 const AdminResenas = () => {
+    const { user } = useContext(AuthContext);
     const [resenas, setResenas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [resenaSeleccionada, setResenaSeleccionada] = useState(null);
@@ -25,6 +28,14 @@ const AdminResenas = () => {
             const res = await axiosInstance.post(`/resenas/moderar/siguiente?aprobar=${aprobar}`);
             const estado = aprobar ? 'aprobada' : 'rechazada';
             Swal.fire(`Reseña ${estado}`, `ID: ${res.data.id}`, 'success');
+
+            await registrarAccionAdmin({
+                accion: `Reseña ${estado}`,
+                descripcion: `El administrador ${user.nombreCompleto} ${estado} la reseña con ID ${res.data.id}.`,
+                tipo: "RESEÑA",
+                adminId: user.id
+            });
+
             fetchResenas();
         } catch {
             Swal.fire('Sin pendientes', 'No hay reseñas pendientes.', 'info');
@@ -50,6 +61,14 @@ const AdminResenas = () => {
 
         try {
             await axiosInstance.delete(`/resenas/${resena.id}/usuario/${resena.usuario.id}`);
+
+            await registrarAccionAdmin({
+                accion: "Eliminación de reseña",
+                descripcion: `El administrador ${user.nombreCompleto} eliminó la reseña con ID ${resena.id} del usuario ${resena.usuario.nombreCompleto}.`,
+                tipo: "RESEÑA",
+                adminId: user.id
+            });
+
             Swal.fire('Eliminada', 'La reseña fue eliminada correctamente.', 'success');
             fetchResenas();
         } catch {

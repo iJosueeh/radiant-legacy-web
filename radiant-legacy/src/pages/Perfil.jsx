@@ -62,7 +62,6 @@ const Perfil = () => {
                 tipo: "PERFIL",
                 adminId: user.id
             });
-            console.log("Registrando acción con adminId:", user?.id);
         } catch (err) {
             console.error("Error al actualizar perfil:", err);
             Swal.fire("Error", err.message || "No se pudo actualizar.", "error");
