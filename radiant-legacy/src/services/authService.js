@@ -41,8 +41,20 @@ export const registerUser = async ({
 };
 
 export const updateProfile = async (userId, data) => {
+  const body = {
+    nombreCompleto: data.nombreCompleto,
+    telefono: data.telefono,
+    direccion: data.direccion,
+    credenciales: data.password
+      ? {
+          email: data.email, 
+          password: data.password,
+        }
+      : undefined,
+  };
+
   try {
-    const response = await axiosInstance.put(`/auth/usuarios/${userId}`, data);
+    const response = await axiosInstance.put(`/auth/usuarios/${userId}`, body);
     return response.data;
   } catch (error) {
     throw new Error(

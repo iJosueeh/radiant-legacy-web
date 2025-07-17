@@ -27,7 +27,7 @@ const Login = () => {
             setError("");
 
             const response = await loginUser({ email, password });
-
+            console.log("Respuesta del backend:", response);
             login(response);
 
             await Swal.fire({

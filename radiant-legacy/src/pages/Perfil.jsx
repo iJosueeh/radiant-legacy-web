@@ -1,22 +1,41 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { updateProfile } from '../services/authService';
 import Swal from 'sweetalert2';
 import DashboardLayout from '../layouts/DashboardLayout';
+import { useNavigate } from 'react-router-dom';
+import { registrarAccionAdmin } from '../services/adminLogService';
 
 const Perfil = () => {
-    const { user, login } = useContext(AuthContext);
+    const { user, login, loading } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    const [nombreCompleto, setNombreCompleto] = useState(user?.nombreCompleto || '');
-    const [telefono, setTelefono] = useState(user?.telefono || '');
-    const [direccion, setDireccion] = useState(user?.direccion || '');
+    const [nombreCompleto, setNombreCompleto] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [direccion, setDireccion] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    if (!user?.id) {
-        Swal.fire("Error", "No se pudo obtener el usuario actual.", "error");
-        return null;
-    }
+    useEffect(() => {
+        if (!loading && (!user || !user.id)) {
+            console.error("No se pudo obtener el usuario actual del contexto:", user);
+            Swal.fire({
+                title: "Sesión inválida",
+                text: "No se pudo obtener el usuario actual. Es posible que tu sesión haya expirado.",
+                icon: "error",
+                confirmButtonText: "Ir al login"
+            }).then(() => {
+                navigate("/login");
+            });
+        } else if (user) {
+            setNombreCompleto(user.nombreCompleto || '');
+            setTelefono(user.telefono || '');
+            setDireccion(user.direccion || '');
+        }
+    }, [loading, user, navigate]);
+
+    if (loading) return <p className="text-center mt-5">Cargando sesión...</p>;
+    if (!user || !user.id) return null;
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -29,12 +48,23 @@ const Perfil = () => {
                 nombreCompleto,
                 telefono,
                 direccion,
+                email: user.credenciales.email,
                 ...(password && { password }),
             };
+
             const updatedUser = await updateProfile(user.id, updatedData);
-            login(updatedUser);
+            login({ usuario: updatedUser });
             Swal.fire("¡Actualizado!", "Tu perfil ha sido modificado.", "success");
+            console.log("Registrando acción con adminId:", user?.id);
+            await registrarAccionAdmin({
+                accion: "Actualización de perfil",
+                descripcion: `El administrador actualizó su perfil.`,
+                tipo: "PERFIL",
+                adminId: user.id
+            });
+            console.log("Registrando acción con adminId:", user?.id);
         } catch (err) {
+            console.error("Error al actualizar perfil:", err);
             Swal.fire("Error", err.message || "No se pudo actualizar.", "error");
         }
     };
