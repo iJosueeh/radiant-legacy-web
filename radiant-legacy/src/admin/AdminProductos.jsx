@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import { Modal, Button, Form, Card, Row, Col } from "react-bootstrap";
+import { registrarAccionAdmin } from '../services/adminLogService';
+import { AuthContext } from '../context/AuthContext';
 
 const AdminProductos = () => {
+    const { user } = useContext(AuthContext);
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -61,14 +64,33 @@ const AdminProductos = () => {
             if (modoEdicion) {
                 await axiosInstance.put(`/productos/${productoActual.id}`, productoActual);
                 Swal.fire("Actualizado", "Producto actualizado correctamente", "success");
+
+                await registrarAccionAdmin({
+                    accion: "Editar producto",
+                    descripcion: `El administrador editó el producto con ID ${productoActual.id}`,
+                    tipo: "PRODUCTO",
+                    adminId: user.id
+                });
+
             } else {
-                await axiosInstance.post("/productos", productoActual);
+                const res = await axiosInstance.post("/productos", productoActual);
                 Swal.fire("Creado", "Producto agregado correctamente", "success");
-                console.log("Producto guardado:", productoActual); // 👈 Diagnóstico
+
+                await registrarAccionAdmin({
+                    accion: "Crear producto",
+                    descripcion: `El administrador creó el producto con ID ${res.data?.id || 'nuevo'}`,
+                    tipo: "PRODUCTO",
+                    adminId: user.id
+                });
+
+                console.log("Producto guardado:", res.data);
             }
+
             setShowModal(false);
             fetchProductos();
-        } catch {
+
+        } catch (error) {
+            console.error("Error en guardar producto:", error);
             Swal.fire("Error", "No se pudo guardar el producto", "error");
         }
     };
@@ -90,6 +112,14 @@ const AdminProductos = () => {
                 await axiosInstance.delete(`/productos/${id}`);
                 fetchProductos();
                 Swal.fire("Eliminado", "Producto eliminado exitosamente", "success");
+
+                await registrarAccionAdmin({
+                    accion: "Eliminar producto",
+                    descripcion: `El administrador eliminó el producto con ID ${id}`,
+                    tipo: "PRODUCTO",
+                    adminId: user.id
+                });
+
             } catch {
                 Swal.fire("Error", "No se pudo eliminar el producto", "error");
             }

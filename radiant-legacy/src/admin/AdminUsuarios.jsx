@@ -29,7 +29,7 @@ const AdminUsuarios = () => {
       await axiosInstance.put(`/auth/usuarios/${id}/${accion}`);
       Swal.fire({
         icon: "success",
-        title: `Usuario ${accion}do correctamente`,
+        title: `Usuario, nuevo estado "${accion}" correctamente`,
         showConfirmButton: false,
         timer: 1500,
       });

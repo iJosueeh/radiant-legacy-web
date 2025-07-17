@@ -51,6 +51,15 @@ const AdminInicio = () => {
             </CardBody>
           </Card>
         </div>
+        <div className="col-md-4">
+          <Card className="shadow-sm border-0">
+            <CardBody>
+              <h5 className="fw-bold">Administración de Productos</h5>
+              <p className="text-muted">Gestiona los productos registrados en la plataforma.</p>
+              <Link to="/admin/productos" className="btn btn-outline-success w-100">Ir a productos</Link>
+            </CardBody>
+          </Card>
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import Swal from 'sweetalert2';
 import { Table, Button, Badge, Modal } from 'react-bootstrap';
+import { registrarAccionAdmin } from '../services/adminLogService';
+import { AuthContext } from '../context/AuthContext';
 
 const AdminPedidos = () => {
+    const { user } = useContext(AuthContext);
     const [pedidos, setPedidos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
@@ -39,6 +42,7 @@ const AdminPedidos = () => {
                 Swal.fire('Sin pedidos', 'No hay pedidos pendientes en la cola.', 'info');
             } else {
                 const pedido = res.data;
+
                 Swal.fire({
                     title: 'Pedido procesado',
                     html: `
@@ -48,6 +52,14 @@ const AdminPedidos = () => {
                         `,
                     icon: 'success',
                 });
+
+                await registrarAccionAdmin({
+                    accion: "Procesar pedido",
+                    descripcion: `Se procesó el pedido con ID ${pedido.id}`,
+                    tipo: "PEDIDO",
+                    adminId: user.id
+                });
+
                 fetchPedidos();
             }
         } catch {
@@ -85,7 +97,12 @@ const AdminPedidos = () => {
                 icon: 'success',
             });
 
-
+            await registrarAccionAdmin({
+                accion: "Deshacer pedido",
+                descripcion: `Se deshizo el pedido con ID ${res.data.id}`,
+                tipo: "PEDIDO",
+                adminId: user.id
+            });
 
             fetchPedidos();
         } catch {
@@ -108,6 +125,14 @@ const AdminPedidos = () => {
         try {
             await axiosInstance.put(`/pedidos/${id}/cancelar`);
             Swal.fire('Cancelado', 'El pedido fue cancelado correctamente.', 'success');
+
+            await registrarAccionAdmin({
+                accion: "Cancelar pedido",
+                descripcion: `Se canceló el pedido con ID ${id}`,
+                tipo: "PEDIDO",
+                adminId: user.id
+            });
+
             fetchPedidos();
         } catch {
             Swal.fire('Error', 'No se pudo cancelar el pedido.', 'error');

@@ -69,6 +69,16 @@ const DashboardAdminSidebar = () => {
             <i className="bi bi-chat-dots"></i> Reseñas
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="/admin/logs"
+            className={({ isActive }) =>
+              `nav-link d-flex align-items-center gap-2 ${isActive ? 'text-primary fw-semibold' : 'text-dark'}`
+            }
+          >
+            <i className="bi bi-journal-code"></i> Registro de Acciones
+          </NavLink>
+        </li>
       </ul>
     </div>
   );
