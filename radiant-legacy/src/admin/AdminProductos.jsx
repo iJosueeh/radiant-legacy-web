@@ -39,7 +39,7 @@ const AdminProductos = () => {
         }
     };
 
-    const handleEditar = (producto) => {
+    const handleEditar = async (producto) => {
         setModoEdicion(true);
         setProductoActual({ ...producto });
         setShowModal(true);
@@ -68,7 +68,7 @@ const AdminProductos = () => {
                 await registrarAccionAdmin({
                     accion: "Editar producto",
                     descripcion: `El administrador editó el producto con ID ${productoActual.id}`,
-                    tipo: "PRODUCTO",
+                    tipo: "PRODUCTO_EDICION",
                     adminId: user.id
                 });
 

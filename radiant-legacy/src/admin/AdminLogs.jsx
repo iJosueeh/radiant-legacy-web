@@ -79,6 +79,9 @@ const AdminLogs = () => {
 
     try {
       const res = await axiosInstance.post('/admin/logs/deshacer-ultima');
+
+      console.log("Respuesta del backend:", res.data);
+
       Swal.fire({
         title: 'Acción deshecha',
         html: `
